@@ -2,6 +2,7 @@ name: slim-ci
 
 on:
   - workflow_dispatch
+  - push
 
 jobs:
   build:
@@ -35,11 +36,14 @@ jobs:
           echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
 
       - name: build dbt
-        run: dbt build
+        run: dbt build --target prod
 
-      - uses: actions/upload-artifact@v4
+      # loading db would be unnecessary in a real prod
+      - name: cache prod db and manifest
+        id: prod-artifacts
+        uses: actions/cache/save@v4
         with:
-          name: prod-artifacts
           path: |
             target/manifest.json
             jaffle_shop.duckdb
+          key: prod-dbt-artifacts
