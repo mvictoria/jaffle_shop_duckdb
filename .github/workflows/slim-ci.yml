@@ -1,4 +1,4 @@
-name: build
+name: slim-ci
 
 on:
   - push
@@ -51,4 +51,4 @@ jobs:
           mv target/manifest.json defer/manifest.json
 
       - name: list changed models
-        run: dbt ls -s state:modified --state defer --target ci
+        run: dbt run -s state:modified --state defer --target ci
