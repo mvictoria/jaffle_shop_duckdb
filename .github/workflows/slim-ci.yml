@@ -52,3 +52,6 @@ jobs:
 
       - name: list changed models
         run: dbt run -s state:modified --state defer --target ci
+
+      - name: list changed models
+        run: dbt test -s state:modified+1 --state defer --target ci
