@@ -1,8 +1,21 @@
 jaffle_shop:
+  target: prod
+  outputs:
+    dev:
+      type: duckdb
+      path: 'jaffle_shop.duckdb'
+      threads: 24
+
+  target: ci
+  outputs:
+    dev:
+      type: duckdb
+      path: 'jaffle_shop-ci.duckdb'
+      threads: 24
 
   target: dev
   outputs:
     dev:
       type: duckdb
-      path: 'jaffle_shop.duckdb'
+      path: 'jaffle_shop-dev.duckdb'
       threads: 24

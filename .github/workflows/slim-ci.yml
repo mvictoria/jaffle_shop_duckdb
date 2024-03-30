@@ -1,0 +1,40 @@
+name: build
+
+on:
+  - workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: load cached venv
+        id: venv-cache
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version}}-${{ hashFiles('requirements.txt') }}
+
+      - name: setup environment
+        if: ${{ steps.venv-cache.outputs.cache-hit != 'true' }}
+        run: |
+          pip install uv
+          uv venv
+          uv pip install -r requirements.txt
+
+      - name: add venv to path
+        run: |
+          source .venv/bin/activate
+          echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
+          echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
+        
+      - name: download prod artifacts
+        uses: actions/download-artifact@v4
+        with:
+            name: prod-artifacts
