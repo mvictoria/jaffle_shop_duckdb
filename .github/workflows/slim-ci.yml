@@ -45,9 +45,10 @@ jobs:
           key: prod-dbt-artifacts
 
       - name: move manifest to deferred folder
+        if: ${{ steps.prod-artifacts.outputs.cache-hit == 'true' }}
         run: |
           mkdir defer
           mv target/manifest.json defer/manifest.json
 
       - name: list changed models
-        run: dbt ls -s state:modified --state defer
+        run: dbt ls -s state:modified --state defer --target ci
