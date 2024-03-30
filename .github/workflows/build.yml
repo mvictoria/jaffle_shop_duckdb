@@ -1,4 +1,4 @@
-name: build
+name: slim-ci
 
 on:
   - workflow_dispatch
