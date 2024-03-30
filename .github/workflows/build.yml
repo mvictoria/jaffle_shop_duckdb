@@ -24,10 +24,9 @@ jobs:
 
       - name: setup environment
         run: |
-          python3 -m venv venv
-          source venv/bin/activate
-          python3 -m pip install --upgrade pip
-          python3 -m pip install -r requirements.txt
+          pip install uv
+          uv venv
+          uv pip install -r requirements.txt
 
       - name: add venv to path
         run: |
